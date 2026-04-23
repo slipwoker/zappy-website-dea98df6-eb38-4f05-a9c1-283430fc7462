@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>בחרו לפי משקל, שלמו בחכמה — נאות שדה</title>
+    <meta name="description" content="רוצים לדעת איך קונים בנאות שדה? מערכת הבחירה לפי משקל מאפשרת לכם להוסיף סל ירקות ופירות בריאים לעגלה בדיוק כמות שתרצו — פשוט, שקוף וחסכוני.">
+    <meta name="keywords" content="קנייה לפי משקל, סל ירקות ופירות בריאים, הזמנת פירות וירקות אונליין, נאות שדה, חנות ירקות דיגיטלית">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: 'dea98df6-eb38-4f05-a9c1-283430fc7462',
+    apiUrl: 'https://api.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        trackEvent('click', {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        });
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        trackEvent('navigation', {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        });
+      }
+    }, true);
+  }
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+    <meta property="og:title" content="בחרו לפי משקל, שלמו בחכמה — נאות שדה">
+    <meta property="og:description" content="רוצים לדעת איך קונים בנאות שדה? מערכת הבחירה לפי משקל מאפשרת לכם להוסיף סל ירקות ופירות בריאים לעגלה בדיוק כמות שתרצו — פשוט, שקוף וחסכוני.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="בחרו לפי משקל, שלמו בחכמה — נאות שדה">
+    <meta name="twitter:description" content="רוצים לדעת איך קונים בנאות שדה? מערכת הבחירה לפי משקל מאפשרת לכם להוסיף סל ירקות ופירות בריאים לעגלה בדיוק כמות שתרצו — פשוט, שקוף וחסכוני.">
+    <meta property="og:type" content="website">
+  <meta property="og:locale" content="he_IL">
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Cookie Consent -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css">
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <!-- Mickidum Accessibility Toolbar -->
+    <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+
+    <style id="zappy-dropdown-submenu-styles">
+      /* ========== DESKTOP DROPDOWN SUBMENU STYLES ========== */
+      /* Base styles for dropdown submenus - parent must be positioned */
+      .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { position: relative; }
+      /* Submenu base - hidden by default */
+      .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { display: block !important; position: absolute !important; top: 100%; left: 0; min-width: 220px; background: white; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; z-index: 1000; list-style: none; pointer-events: none; }
+      /* CRITICAL: Desktop hover styles to show dropdown */
+      .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Submenu item styling */
+      .sub-menu li { list-style: none; margin: 0; padding: 0; }
+      .sub-menu a { display: block !important; padding: 10px 16px !important; color: var(--text-dark, #333) !important; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background-color 0.2s; }
+      .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+      [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 10px !important; padding-right: 28px !important; }
+      .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+      .sub-menu a:hover { background-color: #f5f5f5; }
+      /* RTL (Hebrew/Arabic) dropdown positioning */
+      [dir="rtl"] .nav-menu .sub-menu, [dir="rtl"] nav .sub-menu, [dir="rtl"] .navbar .sub-menu, html[lang="he"] .nav-menu .sub-menu, html[lang="he"] nav .sub-menu, html[lang="he"] .navbar .sub-menu, html[lang="ar"] .nav-menu .sub-menu, html[lang="ar"] nav .sub-menu, html[lang="ar"] .navbar .sub-menu { left: auto !important; right: 0 !important; }
+      /* Hide empty dropdown menus (exclude catalog sub-menus that use <a> children instead of <li>) */
+      .sub-menu:empty, .sub-menu:not(:has(li:not(.zappy-hidden-menu-item))):not(:has(> a)), .sub-menu:not(:has(li)):not(:has(> a)) { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+      /* Desktop: show submenu on Menu Group hover */
+      li:has(.menu-group-title):hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Menu Group title styling */
+      .nav-menu > li > .menu-group-title, #navMenu > li > .menu-group-title { display: inline-block; padding: 0.5rem 1rem; cursor: default; user-select: none; }
+      
+      /* ========== MOBILE SUBMENU STYLES ========== */
+      @media (max-width: 768px) {
+        .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { position: static !important; transform: none !important; box-shadow: none !important; background: transparent !important; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; padding: 0 !important; border-radius: 0 !important; }
+        .navbar .sub-menu.mobile-expanded, .nav-menu .sub-menu.mobile-expanded, #navMenu .sub-menu.mobile-expanded { max-height: none !important; overflow-y: visible !important; opacity: 1 !important; visibility: visible !important; padding: 8px 0 8px 16px !important; }
+        [dir="rtl"] .sub-menu.mobile-expanded, html[lang="he"] .sub-menu.mobile-expanded { padding: 8px 16px 8px 0 !important; }
+        /* Disable hover behavior on mobile */
+        .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 0; visibility: hidden; pointer-events: none; }
+        .nav-menu li > .sub-menu.mobile-expanded, nav li > .sub-menu.mobile-expanded, .navbar li > .sub-menu.mobile-expanded, #navMenu li > .sub-menu.mobile-expanded { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+        .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { display: flex !important; flex-wrap: wrap !important; align-items: center !important; position: relative !important; min-height: 44px !important; }
+        .nav-menu li:has(.sub-menu) > a, nav li:has(.sub-menu) > a, .navbar li:has(.sub-menu) > a, #navMenu li:has(.sub-menu) > a { flex: 1 !important; min-width: 0 !important; }
+        .nav-menu li:has(.sub-menu) > .menu-group-title, nav li:has(.sub-menu) > .menu-group-title, .navbar li:has(.sub-menu) > .menu-group-title, #navMenu li:has(.sub-menu) > .menu-group-title { flex: 1 !important; min-width: 0 !important; padding: 0 !important; line-height: inherit !important; }
+        .nav-menu li:has(.sub-menu) > .sub-menu, nav li:has(.sub-menu) > .sub-menu, .navbar li:has(.sub-menu) > .sub-menu, #navMenu li:has(.sub-menu) > .sub-menu { flex-basis: 100% !important; width: 100% !important; }
+        .nav-menu li:has(.sub-menu) > a [class*="chevron"], .nav-menu li:has(.sub-menu) > a [class*="arrow"], .nav-menu li:has(.sub-menu) > a .fa-chevron-down, .nav-menu li:has(.sub-menu) > a .fa-angle-down, nav li:has(.sub-menu) > a [class*="chevron"], nav li:has(.sub-menu) > a [class*="arrow"], #navMenu li:has(.sub-menu) > a [class*="chevron"], #navMenu li:has(.sub-menu) > a [class*="arrow"] { display: none !important; visibility: hidden !important; }
+        .mobile-submenu-toggle { display: flex !important; align-items: center !important; justify-content: center !important; width: 44px !important; height: auto !important; background: transparent !important; border: none !important; cursor: pointer !important; color: var(--text-dark) !important; position: static !important; flex-shrink: 0 !important; align-self: stretch !important; z-index: 2 !important; padding: 0 !important; margin: 0 !important; }
+        .mobile-submenu-toggle::after { content: '' !important; width: 0 !important; height: 0 !important; border-left: 6px solid transparent !important; border-right: 6px solid transparent !important; border-top: 7px solid currentColor !important; transition: transform 0.3s ease !important; }
+        .mobile-submenu-toggle.expanded::after { transform: rotate(180deg) !important; }
+        .sub-menu a { padding: 10px 0 !important; display: block !important; color: var(--text-dark) !important; white-space: normal !important; }
+        .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+        [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 0 !important; padding-right: 28px !important; }
+        .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+        .nav-menu.active, #navMenu.active { max-width: 100vw !important; overflow-x: hidden !important; box-sizing: border-box !important; }
+        .navbar .sub-menu li a, nav.navbar .sub-menu li a, .zappy-products-dropdown .sub-menu a { color: var(--text-dark) !important; }
+      }
+      @media (min-width: 769px) { .mobile-submenu-toggle { display: none !important; } }
+    </style>
+
+    <style id="mobile-lang-menu-deployed-css">
+    @media (max-width: 768px) {
+      .lang-switcher,
+      .nav-cta-container .lang-switcher,
+      .nav-container .lang-switcher,
+      .navbar .lang-switcher,
+      .navbar .nav-cta-container .lang-switcher,
+      .nav-icons-left .lang-switcher,
+      .nav-ecommerce-icons .lang-switcher { display: none !important; }
+      .mobile-lang-menu { width: 100%; border-top: 1px solid rgba(128,128,128,0.2); padding: 8px 0 0 0; margin-top: 8px; }
+      .mobile-lang-toggle { display: flex !important; align-items: center; justify-content: space-between; width: 100%; padding: 12px 16px; background: none; border: none; cursor: pointer; font-size: 15px; color: inherit; font-family: inherit; }
+      .mobile-lang-toggle::after { content: ''; display: inline-block; width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); transition: transform 0.3s ease; margin-left: 8px; }
+      .mobile-lang-toggle.expanded::after { transform: rotate(-135deg); }
+      .mobile-lang-options { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+      .mobile-lang-options.expanded { max-height: 300px; }
+      .mobile-lang-option { display: flex !important; align-items: center; gap: 10px; padding: 10px 24px; text-decoration: none; color: inherit; font-size: 14px; font-family: inherit; }
+      .mobile-lang-option:hover { background: rgba(128,128,128,0.1); }
+      .mobile-lang-option.active { font-weight: 600; opacity: 0.7; pointer-events: none; }
+      .mobile-lang-option img { width: 20px; height: 20px; border-radius: 50%; }
+    }
+    @media (min-width: 769px) {
+      .mobile-lang-menu { display: none !important; }
+    }
+    </style>
+
+    <style id="zappy-widget-visibility">
+      #mic-access-tool-general-button, .mic-access-tool-general-button,
+      #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+      ._access-icon, #mic-access-tool-box, .mic-access-tool-box,
+      #mic-init-access-tool #mic-access-tool-box, div[id*="mic-access-tool-box"], ._access-menu {
+        display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important;
+      }
+    </style>
+</head>
+<body>
+
+
+    <div class="mobile-search-panel" id="mobile-search-panel">
+      <div class="search-wrapper">
+        <input type="text" id="mobile-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
+        <button class="search-submit" id="mobile-search-submit" title="חיפוש">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+        </button>
+        <button class="close-search" id="close-mobile-search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div class="search-results" id="mobile-search-results"></div>
+    </div>
+  
+<script>window.ZAPPY_WEBSITE_ID = "dea98df6-eb38-4f05-a9c1-283430fc7462";window.ZAPPY_API_BASE = (window.location.pathname.includes('/preview') ? "https://api.zappy5.com" : "https://api.zappy5.com");</script>
+  <nav class="navbar" dir="rtl">
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+    <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display: none;">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+  </button>
+
+  <button class="phone-header-btn" data-phone="" aria-label="Call">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </svg>
+  </button>
+
+  <div class="nav-container">
+    <div class="nav-right-group"><div class="nav-brand">
+      <a href="/" class="logo-link">
+        <img src="/assets/logo.webp" alt="נאות שדה" class="logo">
+      </a>
+    </div><ul class="nav-menu" id="navMenu">
+
+    <li class="menu-item-has-children zappy-products-dropdown">
+      <a href="/products">
+        מוצרים
+        <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 9l6 6 6-6"></path>
+        </svg>
+      </a>
+      <ul class="sub-menu" id="zappy-nav-category-links">
+        <li><a href="/products">כל המוצרים</a></li>
+        <!-- Categories will be loaded dynamically -->
+      </ul>
+    </li>
+  <li><a href="/how-it-works">איך זה עובד</a></li><li><a href="/about">אודות</a></li><li><a href="/contact">צור קשר</a></li></ul><div class="nav-ecommerce-icons nav-icons-left"><a href="/login" class="login-link nav-login" title="התחברות"><svg class="login-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></a><a href="#cart" class="cart-link nav-cart" id="cart-drawer-toggle" title="עגלת קניות"><svg class="cart-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><span class="cart-count">0</span></a><div class="nav-search-box">
+    <input type="text" class="nav-search-input" id="nav-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
+    <button class="nav-search-btn" id="nav-search-btn" title="חיפוש">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <div class="nav-search-results" id="nav-search-results"></div>
+  </div></div><div class="nav-ecommerce-icons nav-icons-right"><button class="nav-search-toggle" id="mobile-search-toggle" title="חיפוש"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg></button></div></div>
+
+    
+
+    
+  </div>
+</nav>
+
+    <nav class="zappy-catalog-menu rtl" id="zappy-catalog-menu" dir="rtl" style="display:none">
+      <div class="catalog-menu-container">
+        <a href="/products" class="catalog-menu-item catalog-menu-all">כל המוצרים</a>
+        <div class="catalog-menu-categories" id="zappy-category-links">
+          <!-- Categories will be loaded dynamically -->
+        </div>
+      </div>
+    </nav>
+  
+<script>
+
+// Navbar Mobile Menu Toggle and Contrast Fix
+(function() {
+  // Use 'load' event instead of 'DOMContentLoaded' to ensure we run AFTER all other scripts
+  window.addEventListener('load', function() {
+    
+    // FIX MOBILE BUTTON CONTRAST
+    // Detect navbar background color and apply contrasting color to mobile buttons
+    const navbar = document.querySelector('.navbar, nav, header');
+    if (!navbar) {
+      console.log('[Navbar] Navbar element not found');
+      return;
+    }
+    
+    // DECLARE VARIABLES EARLY to avoid Temporal Dead Zone errors
+    // These are used in multiple places below
+    let mobileToggle = document.getElementById('mobileToggle') ||
+                       document.querySelector('.mobile-toggle') ||
+                       document.querySelector('.hamburger') ||
+                       document.querySelector('.hamburger-menu') ||
+                       document.querySelector('.menu-toggle') ||
+                       document.querySelector('.burger-menu') ||
+                       document.querySelector('[aria-label="Menu"]') ||
+                       document.querySelector('[aria-label="תפריט"]');
+    
+    const phoneBtn = document.querySelector('.phone-header-btn');
+    
+    const computedStyle = window.getComputedStyle(navbar);
+    let bgColor = computedStyle.backgroundColor;
+    
+    console.log('[Navbar] Initial navbar background:', bgColor);
+    
+    // Check if background is transparent or rgba with 0 alpha
+    const isTransparent = bgColor === 'transparent' || 
+                         bgColor === 'rgba(0, 0, 0, 0)' ||
+                         (bgColor.startsWith('rgba') && bgColor.includes(', 0)'));
+    
+    if (isTransparent) {
+      // Check for background-image or gradient
+      const bgImage = computedStyle.backgroundImage;
+      if (bgImage && bgImage !== 'none') {
+        console.log('[Navbar] Navbar has background image/gradient, using dark text');
+        bgColor = 'rgb(240, 240, 240)'; // Assume light background
+      } else {
+        // Transparent navbar - check body background
+        const bodyBg = window.getComputedStyle(document.body).backgroundColor;
+        console.log('[Navbar] Navbar transparent, using body background:', bodyBg);
+        bgColor = bodyBg;
+      }
+    }
+    
+    // Calculate luminance to determine if background is light or dark
+    const rgb = bgColor.match(/\d+/g);
+    if (rgb && rgb.length >= 3) {
+      const r = parseInt(rgb[0]);
+      const g = parseInt(rgb[1]);
+      const b = parseInt(rgb[2]);
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      
+      // Mobile button colors are set by Claude's AI-generated CSS (same as .nav-menu a)
+      // No dynamic color overrides needed - colors come from the generated navbar CSS
+      console.log('[Navbar] Mobile button colors preserved from Claude CSS (luminance:', luminance.toFixed(2) + ')');
+      
+      // FIX ICON SIZES - Ensure SVGs are properly sized and visible
+      // INJECT CRITICAL CSS TO OVERRIDE ANY CONFLICTING RULES
+      const criticalCSS = document.createElement('style');
+      criticalCSS.id = 'zappy-mobile-nav-fix';
+      const htmlLang = document.documentElement.lang || 'en';
+      const htmlDir = document.documentElement.dir || 'ltr';
+      // Check both dir attribute AND lang for RTL detection
+      // dir="rtl" is the most reliable indicator
+      const isRTL = htmlDir === 'rtl' || htmlLang === 'he' || htmlLang === 'ar';
+      
+      criticalCSS.textContent = `
+        /* Hide mobile buttons on desktop, show only on mobile */
+        @media (min-width: 769px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            display: none !important;
+          }
+        }
+        
+        /* Show and position mobile buttons correctly on mobile */
+        @media (max-width: 768px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            position: absolute !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            z-index: 1001 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: 50% !important;
+            border: none !important;
+            cursor: pointer !important;
+            padding: 6px !important;
+            background: none !important;
+            color: var(--nav-text, var(--text-dark)) !important;
+          }
+          
+          /* LTR positioning (default): hamburger LEFT, phone RIGHT */
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .mobile-toggle,
+          html[dir="ltr"] .mobile-toggle {
+            left: 12px !important;
+            right: auto !important;
+          }
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .phone-header-btn,
+          html[dir="ltr"] .phone-header-btn {
+            right: 12px !important;
+            left: auto !important;
+          }
+          
+          /* RTL positioning: hamburger RIGHT, phone LEFT */
+          html[dir="rtl"] .mobile-toggle,
+          html[lang="he"] .mobile-toggle,
+          html[lang="ar"] .mobile-toggle {
+            right: 12px !important;
+            left: auto !important;
+          }
+          html[dir="rtl"] .phone-header-btn,
+          html[lang="he"] .phone-header-btn,
+          html[lang="ar"] .phone-header-btn {
+            left: 12px !important;
+            right: auto !important;
+          }
+          
+          /* CRITICAL: Ensure nav-container has min-height on mobile */
+          /* All children are positioned absolutely/fixed on mobile, so height:auto collapses to 0 */
+          .nav-container {
+            min-height: 70px !important;
+            position: relative !important;
+          }
+          
+          /* Ensure SVG icons are properly sized and inherit color */
+          .mobile-toggle svg,
+          .phone-header-btn svg {
+            width: 24px !important;
+            height: 24px !important;
+            /* Don't force display - let JavaScript control hamburger/close toggle */
+          }
+          
+          /* Reset nav-cta-container on mobile - remove desktop box-shadow/padding */
+          /* that creates a visible ghost box when CTA button is hidden */
+          .nav-cta-container {
+            box-shadow: none !important;
+            padding: 0 !important;
+          }
+          
+          /* Hide nav-cta-container entirely on mobile when there's no lang-switcher */
+          /* (only the CTA button is inside, and it's hidden on mobile) */
+          .nav-cta-container:not(:has(.lang-switcher)) {
+            display: none !important;
+          }
+          
+          /* CRITICAL: Prevent hero image fade gradient from bleeding over headline text */
+          /* The .image-fade-gradient has bottom: -30px (extends below parent) */
+          /* On mobile stacked layout, this overlaps the h1 text below the image */
+          .hero-image-column {
+            overflow: hidden !important;
+          }
+          .image-fade-gradient {
+            bottom: 0 !important;
+          }
+          
+          /* Hide desktop language switcher on mobile - hamburger menu handles it */
+          /* High specificity to override stored CSS */
+          .lang-switcher,
+          .nav-cta-container .lang-switcher,
+          .nav-container .lang-switcher,
+          .navbar .lang-switcher,
+          .navbar .nav-cta-container .lang-switcher {
+            display: none !important;
+          }
+        }
+      `;
+      
+      // Remove existing fix if present and inject new one
+      const existing = document.getElementById('zappy-mobile-nav-fix');
+      if (existing) existing.remove();
+      document.head.appendChild(criticalCSS);
+      
+      console.log('[Navbar] Critical CSS injected for mobile nav positioning');
+      
+      // ONLY apply inline positioning styles on mobile viewport
+      // On desktop, the CSS handles hiding these buttons with display: none
+      // Inline styles were breaking desktop layout by overriding CSS
+      const isMobileViewport = window.innerWidth <= 768;
+      
+      if (mobileToggle) {
+        // Icon sizing applies to all viewports for consistency
+        const hamburgerIcon = mobileToggle.querySelector('.hamburger-icon');
+        const closeIcon = mobileToggle.querySelector('.close-icon');
+        
+        if (hamburgerIcon) {
+          hamburgerIcon.style.setProperty('width', '24px', 'important');
+          hamburgerIcon.style.setProperty('height', '24px', 'important');
+          hamburgerIcon.style.setProperty('display', 'block', 'important'); // Show hamburger by default
+        }
+        if (closeIcon) {
+          closeIcon.style.setProperty('width', '24px', 'important');
+          closeIcon.style.setProperty('height', '24px', 'important');
+          closeIcon.style.setProperty('display', 'none', 'important'); // Hide close icon by default
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          mobileToggle.style.setProperty('position', 'absolute', 'important');
+          mobileToggle.style.setProperty('top', '50%', 'important');
+          mobileToggle.style.setProperty('transform', 'translateY(-50%)', 'important');
+          mobileToggle.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          
+          console.log('[Navbar] Mobile toggle positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          mobileToggle.style.removeProperty('position');
+          mobileToggle.style.removeProperty('top');
+          mobileToggle.style.removeProperty('transform');
+          mobileToggle.style.removeProperty('z-index');
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared mobile toggle inline positioning');
+        }
+      }
+      
+      if (phoneBtn) {
+        // Icon sizing applies to all viewports
+        const phoneIcon = phoneBtn.querySelector('svg');
+        if (phoneIcon) {
+          phoneIcon.style.width = '24px';
+          phoneIcon.style.height = '24px';
+          phoneIcon.setAttribute('width', '24');
+          phoneIcon.setAttribute('height', '24');
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          phoneBtn.style.setProperty('position', 'absolute', 'important');
+          phoneBtn.style.setProperty('top', '50%', 'important');
+          phoneBtn.style.setProperty('transform', 'translateY(-50%)', 'important');
+          phoneBtn.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          
+          console.log('[Navbar] Phone button positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          phoneBtn.style.removeProperty('position');
+          phoneBtn.style.removeProperty('top');
+          phoneBtn.style.removeProperty('transform');
+          phoneBtn.style.removeProperty('z-index');
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared phone button inline positioning');
+        }
+      }
+    } else {
+      console.log('[Navbar] Could not parse background color:', bgColor);
+    }
+    
+    // MOBILE MENU TOGGLE
+    // Re-query in case DOM changed (mobileToggle already declared at top of function)
+    mobileToggle = document.getElementById('mobileToggle') ||
+                   document.querySelector('.mobile-toggle') ||
+                   document.querySelector('.hamburger') ||
+                   document.querySelector('.hamburger-menu') ||
+                   document.querySelector('.menu-toggle') ||
+                   document.querySelector('.burger-menu') ||
+                   document.querySelector('[aria-label="Menu"]') ||
+                   document.querySelector('[aria-label="תפריט"]');
+    
+    // EXPANDED SEARCH: Find nav menu by ID or class
+    const navMenu = document.getElementById('navMenu') ||
+                  document.querySelector('.nav-menu') ||
+                  document.querySelector('.nav-links') ||
+                  document.querySelector('nav ul:not(.submenu)');
+    
+    if (!mobileToggle || !navMenu) {
+      console.log('[Navbar] Mobile toggle or menu not found:', { toggle: !!mobileToggle, menu: !!navMenu });
+      return;
+    }
+    
+    // Ensure navMenu has ID for CSS targeting
+    if (!navMenu.id) {
+      navMenu.id = 'navMenu';
+    }
+    
+    console.log('[Navbar] Initializing mobile menu...');
+    
+    // Remove any existing event listeners by cloning the button
+    const newToggle = mobileToggle.cloneNode(true);
+    mobileToggle.parentNode.replaceChild(newToggle, mobileToggle);
+    
+    // Toggle menu on button click - use newToggle now
+    newToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const hamburgerIcon = this.querySelector('.hamburger-icon');
+      const closeIcon = this.querySelector('.close-icon');
+      const isActive = navMenu.classList.contains('active');
+      
+      if (isActive) {
+        // Close menu
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed');
+      } else {
+        // Open menu
+        navMenu.classList.add('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'none', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'block', 'important');
+        document.body.style.overflow = 'hidden';
+        console.log('[Navbar] Menu opened');
+      }
+    });
+    
+    // Close menu when clicking nav links (but NOT dropdown toggles)
+    const navLinks = navMenu.querySelectorAll('a');
+    navLinks.forEach(function(link) {
+      link.addEventListener('click', function() {
+        // Don't close if it's a dropdown child (unless it's a real navigation link)
+        if (this.getAttribute('href') === '#') return;
+        
+        const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+        const closeIcon = newToggle.querySelector('.close-icon');
+        
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed (link clicked)');
+      });
+    });
+    
+    // DROPDOWN MENU TOGGLE (for mobile and touch devices)
+    var dropdownToggles = navMenu.querySelectorAll('.dropdown-toggle');
+    dropdownToggles.forEach(function(toggle) {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var parent = this.closest('.nav-dropdown');
+        if (!parent) return;
+        
+        // Close other open dropdowns at the same level
+        var siblings = parent.parentNode.querySelectorAll('.nav-dropdown.open');
+        siblings.forEach(function(sib) {
+          if (sib !== parent) sib.classList.remove('open');
+        });
+        
+        parent.classList.toggle('open');
+        console.log('[Navbar] Dropdown toggled:', parent.classList.contains('open') ? 'open' : 'closed');
+      });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.nav-dropdown')) {
+        var openDropdowns = document.querySelectorAll('.nav-dropdown.open');
+        openDropdowns.forEach(function(dd) { dd.classList.remove('open'); });
+      }
+    });
+    
+    console.log('[Navbar] Dropdown handlers initialized for ' + dropdownToggles.length + ' dropdowns');
+    
+    // Phone button functionality (phoneBtn already declared at top of function)
+    if (phoneBtn) {
+      phoneBtn.addEventListener('click', function() {
+        // Get phone number from placeholder in page or use default
+        const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+        const phoneNumber = phoneLinks.length > 0 
+          ? phoneLinks[0].getAttribute('href').replace('tel:', '')
+          : '[business_phone]';
+        
+        window.location.href = 'tel:' + phoneNumber;
+        console.log('[Navbar] Phone button clicked');
+      });
+    }
+    
+    console.log('[Navbar] Mobile menu initialized successfully');
+    
+    // === WHATSAPP BUTTON VISIBILITY FIX ===
+    // Ensure WhatsApp floating button is hidden on desktop and visible on mobile
+    // IMPORTANT: Only target the floating button by its class, NOT generic wa.me links
+    const handleWhatsAppVisibility = function() {
+      const whatsappBtn = document.querySelector('.whatsapp-float');
+      if (whatsappBtn) {
+        const isDesktop = window.innerWidth >= 769;
+        if (isDesktop) {
+          whatsappBtn.style.setProperty('display', 'none', 'important');
+          whatsappBtn.style.setProperty('visibility', 'hidden', 'important');
+          whatsappBtn.style.setProperty('opacity', '0', 'important');
+          whatsappBtn.style.setProperty('pointer-events', 'none', 'important');
+          console.log('[WhatsApp] Button hidden on desktop');
+        } else {
+          whatsappBtn.style.removeProperty('display');
+          whatsappBtn.style.removeProperty('visibility');
+          whatsappBtn.style.removeProperty('opacity');
+          whatsappBtn.style.removeProperty('pointer-events');
+          console.log('[WhatsApp] Button visible on mobile');
+        }
+      }
+    };
+    
+    // Run on load
+    handleWhatsAppVisibility();
+    
+    // Run on resize with debouncing
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(handleWhatsAppVisibility, 100);
+    });
+  });
+})();
+
+</script>
+  
+  <main>
+    <section class="how-it-works-intro-section" data-layout-spec="איך זה עובד-intro" dir="rtl">
+  <div class="how-it-works-intro-container">
+    <div class="how-it-works-intro-grid">
+
+      <!-- Text Column (START = RIGHT in RTL) -->
+      <div class="how-it-works-intro-text">
+        <span class="how-it-works-intro-badge">איך זה עובד</span>
+        <h1 class="how-it-works-intro-h1">ברוכים הבאים לחוויית הקנייה של נאות שדה</h1>
+        <p class="how-it-works-intro-body">הקטלוג החי שלנו מאפשר לכם לבחור פירות וירקות טריים ומוצרי תוספת בדיוק לפי המשקל שאתם צריכים — לא פחות, לא יותר. הדף הזה נועד לעזור לכם להכיר את הרעיון לפני שאתם מתחילים לגלוש, כדי שהחוויה תהיה נוחה, ברורה ומהנה מהרגע הראשון.</p>
+        <h3 class="how-it-works-intro-h3">טריות ביומיום — פשוט, ברור, ומתאים בדיוק לצרכים שלכם.</h3>
+        <div class="how-it-works-intro-features">
+          <div class="how-it-works-intro-feature-item">
+            <div class="how-it-works-intro-feature-icon">
+              <svg data-element-type="icon" data-icon-type="svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path><path d="M8 12l2.5 2.5L16 9"></path></svg>
+            </div>
+            <div class="how-it-works-intro-feature-text">בחירה לפי משקל מדויק</div>
+          </div>
+          <div class="how-it-works-intro-feature-item">
+            <div class="how-it-works-intro-feature-icon">
+              <svg data-element-type="icon" data-icon-type="svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4"></path><circle cx="9" cy="19" r="1"></circle><circle cx="20" cy="19" r="1"></circle></svg>
+            </div>
+            <div class="how-it-works-intro-feature-text">הוספה קלה לסל הקניות</div>
+          </div>
+          <div class="how-it-works-intro-feature-item">
+            <div class="how-it-works-intro-feature-icon">
+              <svg data-element-type="icon" data-icon-type="svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </div>
+            <div class="how-it-works-intro-feature-text">פירות וירקות טריים ישראל</div>
+          </div>
+        </div>
+        <a href="#how-it-works-steps" class="how-it-works-intro-cta">גלו איך זה עובד <i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+      </div>
+
+      <!-- Image Column (END = LEFT in RTL) -->
+      <div class="how-it-works-intro-image-col">
+        <div class="how-it-works-intro-image-frame">
+          <img data-placeholder="how-it-works-intro-image-1" data-context="A warm, sunlit lifestyle photograph of a wooden farmers market table overflowing with vibrant fresh vegetables and fruits — colorful bell peppers, tomatoes, leafy greens, oranges, and grapes — arranged naturally with a rustic linen cloth and a small vintage weighing scale in the foreground, evoking a trusted local Israeli fresh produce market, warm cream and olive tones, natural daylight, farm-to-table atmosphere" width="600" height="480" src="/assets/site-how-it-works-intro-image-1.webp" alt="ירקות ופירות טריים על שולחן שוק חקלאי" class="how-it-works-intro-img">
+          <div class="how-it-works-intro-image-badge">
+            <span class="how-it-works-intro-badge-icon">
+              <svg data-element-type="icon" data-icon-type="svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"></path><path d="M12 6v6l4 2"></path></svg>
+            </span>
+            <span>טרי מדי יום</span>
+          </div>
+        </div>
+        <div class="how-it-works-intro-decor-dot"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom Divider -->
+  <div class="how-it-works-intro-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,60 L0,28 Q150,10 300,26 T600,18 Q750,10 900,24 T1200,16 L1200,60 Z" fill="#F8F1E4"></path>
+    </svg>
+  </div>
+</section>
+
+<section class="how-it-works-features-section" data-layout-spec="איך זה עובד-features" dir="rtl">
+  <div class="hiw-container">
+    <div class="hiw-intro">
+      <h2 class="hiw-title">למה קנייה בנאות שדה פשוטה ונעימה?</h2>
+      <p class="hiw-subtitle">בנינו חווית קנייה שמתאימה לאופן שבו אנשים באמת קונים ירקות ופירות — לפי משקל, לפי עונה, ולפי הצורך האמיתי. ללא הפתעות, ללא בזבוז, ועם שקיפות מלאה על כל פריט בסל.</p>
+    </div>
+    <div class="hiw-grid">
+      <article class="hiw-card">
+        <div class="hiw-icon-wrap">
+          <svg data-element-type="icon" data-icon-type="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="2" fill="none"></circle>
+            <path d="M24 14v10l6 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M14 34h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            <path d="M24 34v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+          </svg>
+        </div>
+        <div class="hiw-card-body">
+          <h3 class="hiw-card-title">בחירה לפי משקל</h3>
+          <p class="hiw-card-text">בוחרים בדיוק כמה שצריך — גרמים או קילוגרמים. אין חבילות מוכנות מראש, רק הכמות שמתאימה לכם.</p>
+        </div>
+      </article>
+      <article class="hiw-card">
+        <div class="hiw-icon-wrap">
+          <svg data-element-type="icon" data-icon-type="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="14" width="28" height="22" rx="4" stroke="currentColor" stroke-width="2" fill="none"></rect>
+            <path d="M18 14v-3a6 6 0 0 1 12 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            <path d="M17 26h14M17 32h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+          </svg>
+        </div>
+        <div class="hiw-card-body">
+          <h3 class="hiw-card-title">שקיפות לפני הרכישה</h3>
+          <p class="hiw-card-text">רואים את המחיר הכולל לפי המשקל שנבחר עוד לפני שמוסיפים לסל — שום הפתעה בקופה.</p>
+        </div>
+      </article>
+      <article class="hiw-card">
+        <div class="hiw-icon-wrap">
+          <svg data-element-type="icon" data-icon-type="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <path d="M12 36l4-16h16l4 16H12z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"></path>
+            <path d="M20 20v-4a4 4 0 0 1 8 0v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            <circle cx="34" cy="18" r="6" fill="currentColor" opacity="0.15"></circle>
+            <path d="M31 18h6M34 15v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+          </svg>
+        </div>
+        <div class="hiw-card-body">
+          <h3 class="hiw-card-title">שילוב מוצרי תוספת</h3>
+          <p class="hiw-card-text">לצד פירות וירקות טריים, ניתן להוסיף לסל מוצרי תוספת טבעיים לבריאות — הכל בהזמנה אחת נוחה.</p>
+        </div>
+      </article>
+      <article class="hiw-card">
+        <div class="hiw-icon-wrap">
+          <svg data-element-type="icon" data-icon-type="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="8" y="10" width="32" height="28" rx="6" stroke="currentColor" stroke-width="2" fill="none"></rect>
+            <path d="M16 22h16M16 28h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            <circle cx="32" cy="28" r="3" stroke="currentColor" stroke-width="2" fill="none"></circle>
+          </svg>
+        </div>
+        <div class="hiw-card-body">
+          <h3 class="hiw-card-title">חווית קנייה נעימה וברורה</h3>
+          <p class="hiw-card-text">ממשק קריא, רגוע ונוח לעין — מאפשר לכם לדפדף, לבחור ולהזמין בלי לחץ ובלי עומס מידע.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+  <div class="hiw-texture-overlay" aria-hidden="true"></div>
+</section>
+
+<section class="how-it-works-steps-section" data-layout-spec="איך זה עובד-steps" dir="rtl">
+  <div class="hiw-container">
+
+    <!-- Section Header -->
+    <div class="hiw-header">
+      <span class="hiw-eyebrow">פשוט ומהיר</span>
+      <h2 class="hiw-title">איך קונים בנאות שדה?</h2>
+      <p class="hiw-subtitle">בחרו את הפריטים שאתם אוהבים, קבעו את הכמות הנכונה לכם — וקבלו מוצרים טריים ישירות מהשדה.</p>
+    </div>
+
+    <!-- Steps Row -->
+    <div class="hiw-steps-wrapper">
+
+      <!-- Connecting Line -->
+      <div class="hiw-connector" aria-hidden="true">
+        <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 900 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="6" x2="900" y2="6" stroke="var(--border-light)" stroke-width="2" stroke-dasharray="6 8" stroke-linecap="round"></line>
+        </svg>
+      </div>
+
+      <!-- Step 1 -->
+      <article class="hiw-step-card">
+        <div class="hiw-step-number-wrap">
+          <span class="hiw-step-number">01</span>
+        </div>
+        <div class="hiw-step-icon-wrap">
+          <svg data-element-type="icon" data-icon-type="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+            <circle cx="28" cy="28" r="28" fill="var(--primary)" fill-opacity="0.10"></circle>
+            <path d="M20 36 C20 28 24 20 28 18 C32 20 36 28 36 36" stroke="var(--primary)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+            <path d="M28 18 L28 36" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 3"></path>
+            <ellipse cx="28" cy="36" rx="8" ry="3" fill="var(--primary)" fill-opacity="0.18"></ellipse>
+            <path d="M24 26 Q26 23 28 24" stroke="var(--secondary)" stroke-width="1.8" stroke-linecap="round" fill="none"></path>
+            <path d="M32 29 Q34 26 36 27" stroke="var(--secondary)" stroke-width="1.8" stroke-linecap="round" fill="none"></path>
+          </svg>
+        </div>
+        <div class="hiw-step-content">
+          <h3 class="hiw-step-title">בחרו את הפריט</h3>
+          <p class="hiw-step-desc">עיינו בקטלוג ירקות ופירות טריים ובמוצרי התוספת שלנו. בחרו את מה שמתאים לכם — לפי עונה, טעם, או צורך תזונתי.</p>
+          <div class="hiw-pill-examples">
+            <span class="hiw-pill">🥦 ברוקולי</span>
+            <span class="hiw-pill">🍊 תפוזים</span>
+            <span class="hiw-pill">🌿 תוספי טבע</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Step 2 -->
+      <article class="hiw-step-card">
+        <div class="hiw-step-number-wrap">
+          <span class="hiw-step-number">02</span>
+        </div>
+        <div class="hiw-step-icon-wrap">
+          <svg data-element-type="icon" data-icon-type="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+            <circle cx="28" cy="28" r="28" fill="var(--secondary)" fill-opacity="0.12"></circle>
+            <rect x="16" y="30" width="24" height="10" rx="3" fill="var(--secondary)" fill-opacity="0.22"></rect>
+            <path d="M28 14 L28 30" stroke="var(--secondary)" stroke-width="2.2" stroke-linecap="round"></path>
+            <path d="M22 22 L28 30 L34 22" stroke="var(--secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+            <line x1="16" y1="35" x2="40" y2="35" stroke="var(--secondary)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 3"></line>
+            <circle cx="28" cy="35" r="2.5" fill="var(--secondary)"></circle>
+          </svg>
+        </div>
+        <div class="hiw-step-content">
+          <h3 class="hiw-step-title">קבעו את טווח המשקל</h3>
+          <p class="hiw-step-desc">לכל פריט תוכלו לבחור את טווח המשקל המתאים לכם. הגדרת משקל מדויקת מאפשרת לכם לקבל בדיוק את הכמות שצריך — לא יותר ולא פחות.</p>
+          <div class="hiw-pill-examples">
+            <span class="hiw-pill hiw-pill--secondary">250 גר׳</span>
+            <span class="hiw-pill hiw-pill--secondary">500 גר׳</span>
+            <span class="hiw-pill hiw-pill--secondary">1 ק״ג</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Step 3 -->
+      <article class="hiw-step-card">
+        <div class="hiw-step-number-wrap">
+          <span class="hiw-step-number">03</span>
+        </div>
+        <div class="hiw-step-icon-wrap">
+          <svg data-element-type="icon" data-icon-type="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+            <circle cx="28" cy="28" r="28" fill="var(--accent)" fill-opacity="0.10"></circle>
+            <rect x="15" y="17" width="26" height="22" rx="4" stroke="var(--accent)" stroke-width="2" fill="none"></rect>
+            <line x1="20" y1="24" x2="36" y2="24" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"></line>
+            <line x1="20" y1="29" x2="30" y2="29" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"></line>
+            <circle cx="34" cy="33" r="5" fill="var(--primary)" fill-opacity="0.18"></circle>
+            <path d="M31.5 33 L33.2 34.8 L36.5 31.5" stroke="var(--primary)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+          </svg>
+        </div>
+        <div class="hiw-step-content">
+          <h3 class="hiw-step-title">ראו כמויות ברורות בקטלוג</h3>
+          <p class="hiw-step-desc">הקטלוג החי שלנו מציג לכם בזמן אמת את הכמויות הצפויות לפי המשקל שבחרתם — כך תדעו בדיוק מה יגיע אליכם לפני שתאשרו.</p>
+          <div class="hiw-pill-examples">
+            <span class="hiw-pill hiw-pill--accent">~4 יחידות</span>
+            <span class="hiw-pill hiw-pill--accent">~6 יחידות</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+    <!-- /Steps Row -->
+
+  </div>
+
+  <!-- Bottom Divider: dotted seed-fade to next section -->
+  <div class="hiw-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,64 L0,32 Q30,28 60,33 T120,29 Q150,34 180,28 T240,32 Q270,27 300,33 T360,29 Q390,33 420,27 T480,31 Q510,28 540,33 T600,29 Q630,33 660,27 T720,32 Q750,28 780,33 T840,29 Q870,33 900,27 T960,32 Q990,28 1020,33 T1080,29 Q1110,33 1140,27 T1200,32 L1200,64 Z" fill="#F0E8D8"></path>
+    </svg>
+  </div>
+
+</section>
+
+<section class="how-it-works-assurances-section" data-layout-spec="איך זה עובד-assurances" dir="rtl">
+  <div class="how-it-works-assurances-container">
+
+    <!-- Section Header -->
+    <div class="how-it-works-assurances-header">
+      <h2 class="how-it-works-assurances-title">שקיפות ואמינות — כי אתם ראויים לדעת בדיוק מה מגיע אליכם</h2>
+      <p class="how-it-works-assurances-subtitle">ב־נאות שדה בנינו שיטת קנייה שמכבדת את הזמן שלכם, את הטעם שלכם, ואת הבריאות שלכם</p>
+    </div>
+
+    <!-- Two Panels + Divider Strip -->
+    <div class="how-it-works-assurances-panels">
+
+      <!-- Panel One: Freshness -->
+      <article class="how-it-works-assurances-panel">
+        <div class="how-it-works-assurances-panel-icon">
+          <svg data-element-type="icon" data-icon-type="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="2" fill="none"></circle>
+            <path d="M24 10 C18 10 12 16 12 24 C12 32 18 38 24 38 C30 38 36 32 36 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"></path>
+            <path d="M24 10 C24 10 28 14 28 20 C28 26 24 28 24 28 C24 28 20 26 20 20 C20 14 24 10 24 10Z" fill="currentColor" opacity="0.18"></path>
+            <path d="M24 28 L24 38" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            <path d="M18 32 Q24 30 30 32" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"></path>
+          </svg>
+        </div>
+        <h3 class="how-it-works-assurances-panel-title">טריות, הגשה, וכמויות שמתאימות לכם</h3>
+        <ul class="how-it-works-assurances-list">
+          <li class="how-it-works-assurances-list-item">
+            <span class="how-it-works-assurances-check"><i class="fa-solid fa-leaf"></i></span>
+            <div class="how-it-works-assurances-list-content">
+              <strong>טריות מובטחת מדי יום</strong>
+              <p>הירקות והפירות שלנו מגיעים ישירות מהשדה — מוגשים רק לאחר בדיקת טריות קפדנית בכל בוקר.</p>
+            </div>
+          </li>
+          <li class="how-it-works-assurances-list-item">
+            <span class="how-it-works-assurances-check"><i class="fa-solid fa-scale-balanced"></i></span>
+            <div class="how-it-works-assurances-list-content">
+              <strong>בחירה לפי משקל — בלי עודפים</strong>
+              <p>תבחרו בדיוק כמה שאתם צריכים. אין צורך לקנות שקית שלמה — אפשר להזמין 300 גרם עגבניות או חצי קילו תפוחים.</p>
+            </div>
+          </li>
+          <li class="how-it-works-assurances-list-item">
+            <span class="how-it-works-assurances-check"><i class="fa-solid fa-hand-holding-heart"></i></span>
+            <div class="how-it-works-assurances-list-content">
+              <strong>הגשה בקפידה</strong>
+              <p>כל פריט נארז בהתאמה אישית — עם הגנה מתאימה לסוג הפרי או הירק, כדי שיגיע אליכם שלם ורענן.</p>
+            </div>
+          </li>
+          <li class="how-it-works-assurances-list-item">
+            <span class="how-it-works-assurances-check"><i class="fa-solid fa-seedling"></i></span>
+            <div class="how-it-works-assurances-list-content">
+              <strong>עונתיות ומקומיות</strong>
+              <p>אנו מעדיפים תוצרת ישראלית ועונתית — כי פירות וירקות טריים מישראל הם הטובים ביותר בטעם ובתזונה.</p>
+            </div>
+          </li>
+        </ul>
+      </article>
+
+      <!-- Center Visual Strip -->
+      <div class="how-it-works-assurances-strip" aria-hidden="true">
+        <div class="how-it-works-assurances-strip-inner">
+          <!-- Scale marks -->
+          <div class="strip-scale-marks">
+            <span class="strip-mark"></span>
+            <span class="strip-mark strip-mark--long"></span>
+            <span class="strip-mark"></span>
+            <span class="strip-mark strip-mark--long"></span>
+            <span class="strip-mark"></span>
+            <span class="strip-mark strip-mark--long"></span>
+            <span class="strip-mark"></span>
+          </div>
+          <!-- Produce sketches -->
+          <div class="strip-sketches">
+            <svg class="strip-sketch strip-sketch--carrot" viewBox="0 0 28 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14 44 C8 40 4 30 6 18 C8 8 14 4 14 4 C14 4 20 8 22 18 C24 30 20 40 14 44Z" fill="#D98C4A" opacity="0.55"></path>
+              <path d="M14 4 C14 4 10 0 8 2" stroke="#6E8B4A" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.7"></path>
+              <path d="M14 4 C14 4 14 0 14 -1" stroke="#6E8B4A" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.7"></path>
+              <path d="M14 4 C14 4 18 0 20 2" stroke="#6E8B4A" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.7"></path>
+            </svg>
+            <svg class="strip-sketch strip-sketch--apple" viewBox="0 0 36 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 36 C8 34 4 26 4 20 C4 12 10 8 18 8 C26 8 32 12 32 20 C32 26 28 34 18 36Z" fill="#C7634D" opacity="0.45"></path>
+              <path d="M18 8 C18 8 16 4 18 2" stroke="#6E8B4A" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.7"></path>
+              <path d="M18 2 C18 2 22 0 24 4" stroke="#6E8B4A" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.6"></path>
+            </svg>
+            <svg class="strip-sketch strip-sketch--leaf" viewBox="0 0 24 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 34 C4 28 2 18 4 10 C6 4 12 2 12 2 C12 2 18 4 20 10 C22 18 20 28 12 34Z" fill="#6E8B4A" opacity="0.35"></path>
+              <path d="M12 2 L12 34" stroke="#6E8B4A" stroke-width="1" opacity="0.5" stroke-linecap="round"></path>
+              <path d="M12 10 C8 12 6 16 8 20" stroke="#6E8B4A" stroke-width="0.8" opacity="0.4" stroke-linecap="round" fill="none"></path>
+              <path d="M12 10 C16 12 18 16 16 20" stroke="#6E8B4A" stroke-width="0.8" opacity="0.4" stroke-linecap="round" fill="none"></path>
+            </svg>
+          </div>
+          <!-- Weight label -->
+          <div class="strip-weight-label">100<span>גר׳</span></div>
+          <!-- More scale marks -->
+          <div class="strip-scale-marks">
+            <span class="strip-mark"></span>
+            <span class="strip-mark strip-mark--long"></span>
+            <span class="strip-mark"></span>
+            <span class="strip-mark strip-mark--long"></span>
+            <span class="strip-mark"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel Two: Supplements -->
+      <article class="how-it-works-assurances-panel">
+        <div class="how-it-works-assurances-panel-icon">
+          <svg data-element-type="icon" data-icon-type="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="10" y="14" width="28" height="26" rx="6" stroke="currentColor" stroke-width="2" fill="none"></rect>
+            <path d="M16 14 L16 10 Q16 8 24 8 Q32 8 32 10 L32 14" stroke="currentColor" stroke-width="2" fill="none"></path>
+            <path d="M19 24 L29 24" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            <path d="M24 19 L24 29" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            <circle cx="24" cy="24" r="5" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.35"></circle>
+          </svg>
+        </div>
+        <h3 class="how-it-works-assurances-panel-title">תוספים ומוצרי בריאות — איכות שאפשר לסמוך עליה</h3>
+        <ul class="how-it-works-assurances-list">
+          <li class="how-it-works-assurances-list-item">
+            <span class="how-it-works-assurances-check"><i class="fa-solid fa-flask"></i></span>
+            <div class="how-it-works-assurances-list-content">
+              <strong>מוצרי תוספת טבעיים לבריאות</strong>
+              <p>כל תוסף שאנו מציעים עבר בדיקת איכות — אנו בוחרים רק מותגים אמינים עם הרכב נקי ושקוף.</p>
+            </div>
+          </li>
+          <li class="how-it-works-assurances-list-item">
+            <span class="how-it-works-assurances-check"><i class="fa-solid fa-ruler-combined"></i></span>
+            <div class="how-it-works-assurances-list-content">
+              <strong>מינונים ברורים ומובנים</strong>
+              <p>כל מוצר מלווה בהסבר פשוט — כמה לקחת, מתי, ולמה. אין ז׳רגון מדעי, רק מידע שעוזר לכם.</p>
+            </div>
+          </li>
+          <li class="how-it-works-assurances-list-item">
+            <span class="how-it-works-assurances-check"><i class="fa-solid fa-basket-shopping"></i></span>
+            <div class="how-it-works-assurances-list-content">
+              <strong>קנייה נוחה ומשחררת</strong>
+              <p>הוסיפו תוספים לסל ביחד עם הירקות והפירות — הכל בהזמנה אחת, בחוויה אחת רגועה ופשוטה.</p>
+            </div>
+          </li>
+          <li class="how-it-works-assurances-list-item">
+            <span class="how-it-works-assurances-check"><i class="fa-solid fa-circle-check"></i></span>
+            <div class="how-it-works-assurances-list-content">
+              <strong>ליווי אישי ומענה מהיר</strong>
+              <p>יש שאלה? אנחנו כאן. צוות נאות שדה זמין לייעוץ אישי על כל מוצר — כי שירות טוב הוא חלק מהמוצר.</p>
+            </div>
+          </li>
+        </ul>
+      </article>
+
+    </div>
+    <!-- End Panels -->
+
+  </div>
+
+  <!-- Bottom Scallop Divider -->
+  <div class="how-it-works-assurances-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,70 L0,38 Q30,20 60,38 Q90,56 120,38 Q150,20 180,38 Q210,56 240,38 Q270,20 300,38 Q330,56 360,38 Q390,20 420,38 Q450,56 480,38 Q510,20 540,38 Q570,56 600,38 Q630,20 660,38 Q690,56 720,38 Q750,20 780,38 Q810,56 840,38 Q870,20 900,38 Q930,56 960,38 Q990,20 1020,38 Q1050,56 1080,38 Q1110,20 1140,38 Q1170,56 1200,38 L1200,70 Z" fill="#FBF6ED"></path>
+    </svg>
+  </div>
+
+</section>
+
+<section class="how-it-works-faq-section" data-layout-spec="איך זה עובד-faq" dir="rtl">
+  <div class="how-it-works-faq-container">
+    <div class="how-it-works-faq-header">
+      <span class="how-it-works-faq-eyebrow">שאלות נפוצות</span>
+      <h2 class="how-it-works-faq-title">כל מה שרצית לדעת על נאות שדה</h2>
+      <p class="how-it-works-faq-subtitle">ענינו על השאלות הכי נפוצות כדי שתוכלו לקנות בקלות, בביטחון ובשמחה</p>
+    </div>
+
+    <div class="how-it-works-faq-list">
+
+      <!-- Q1 - Prominent -->
+      <article class="how-it-works-faq-item how-it-works-faq-item--featured">
+        <div class="how-it-works-faq-marker">
+          <span class="how-it-works-faq-marker-dot"></span>
+          <span class="how-it-works-faq-marker-number">01</span>
+        </div>
+        <div class="how-it-works-faq-content">
+          <h3 class="how-it-works-faq-question">איך בוחרים מוצרים לפי משקל?</h3>
+          <p class="how-it-works-faq-answer">בנאות שדה פיתחנו מערכת בחירה ייחודית לפי משקל — ממש כמו בשוק האמיתי. בכל עמוד מוצר תוכלו לבחור כמה גרם או קילו תרצו, להוסיף לסל ולראות את המחיר מתעדכן בזמן אמת. כך תמיד תקבלו בדיוק את הכמות שצריכה לכם, בלי בזבוז ובלי הפתעות.</p>
+        </div>
+      </article>
+
+      <div class="how-it-works-faq-divider" aria-hidden="true"></div>
+
+      <!-- Q2 -->
+      <article class="how-it-works-faq-item">
+        <div class="how-it-works-faq-marker">
+          <span class="how-it-works-faq-marker-dot"></span>
+          <span class="how-it-works-faq-marker-number">02</span>
+        </div>
+        <div class="how-it-works-faq-content">
+          <h3 class="how-it-works-faq-question">כמה זה כמות מעשית לבית?</h3>
+          <p class="how-it-works-faq-answer">אנחנו מציגים בכל מוצר הנחיה קצרה — לדוגמה: "250 גרם מספיקים לסלט ל-2 אנשים" או "קילו עגבניות לשבוע של משפחה". כך תוכלו להזמין בדיוק לפי הצורך שלכם, בלי לנחש ובלי להזמין יותר מדי.</p>
+        </div>
+      </article>
+
+      <div class="how-it-works-faq-divider" aria-hidden="true"></div>
+
+      <!-- Q3 -->
+      <article class="how-it-works-faq-item">
+        <div class="how-it-works-faq-marker">
+          <span class="how-it-works-faq-marker-dot"></span>
+          <span class="how-it-works-faq-marker-number">03</span>
+        </div>
+        <div class="how-it-works-faq-content">
+          <h3 class="how-it-works-faq-question">האם ירקות, פירות ומוצרי תוספת מופיעים יחד בסל?</h3>
+          <p class="how-it-works-faq-answer">בהחלט. הסל שלנו מאחד את כל הקטגוריות — פירות וירקות טריים לצד תוספי תזונה, קטניות, אגוזים ומוצרי בריאות — בהזמנה אחת נוחה. אפשר לעיין בכל הקטגוריות ולהוסיף לסל בכל סדר שתרצו.</p>
+        </div>
+      </article>
+
+      <div class="how-it-works-faq-divider" aria-hidden="true"></div>
+
+      <!-- Q4 -->
+      <article class="how-it-works-faq-item">
+        <div class="how-it-works-faq-marker">
+          <span class="how-it-works-faq-marker-dot"></span>
+          <span class="how-it-works-faq-marker-number">04</span>
+        </div>
+        <div class="how-it-works-faq-content">
+          <h3 class="how-it-works-faq-question">איך אני יודע שהתוצרת באמת טרייה?</h3>
+          <p class="how-it-works-faq-answer">כל מוצר מגיע ישירות מהשדה לחנות. אנחנו מרעננים את המלאי מדי יום ומציינים על כל מוצר את תאריך ההגעה. פירות וירקות טריים מישראל הם הבסיס של נאות שדה — לא נמכור לכם משהו שלא היינו אוכלים בעצמנו.</p>
+        </div>
+      </article>
+
+      <div class="how-it-works-faq-divider" aria-hidden="true"></div>
+
+      <!-- Q5 -->
+      <article class="how-it-works-faq-item">
+        <div class="how-it-works-faq-marker">
+          <span class="how-it-works-faq-marker-dot"></span>
+          <span class="how-it-works-faq-marker-number">05</span>
+        </div>
+        <div class="how-it-works-faq-content">
+          <h3 class="how-it-works-faq-question">מה הופך את נאות שדה לחוויה אישית ונוחה?</h3>
+          <p class="how-it-works-faq-answer">בנינו את האתר כך שיהיה פשוט כמו שיחה עם המוכר בשוק. הניווט ברור, המחירים שקופים, ואפשר לראות בדיוק מה מוסיפים לסל לפי משקל. אם יש שאלה — אנחנו תמיד זמינים. אנחנו חנות שכונתית עם נוכחות דיגיטלית — לא רשת ענק.</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+  </main>
+  
+  <footer class="site-footer" dir="rtl">
+  <div class="footer-inner">
+    <div class="footer-top">
+
+      <!-- Column 1: Company Info -->
+      <div class="footer-col footer-brand">
+        <a href="/" class="footer-logo-link">
+          <img src="/assets/logo.webp" alt="נאות שדה" class="logo">
+        </a>
+        <p class="footer-tagline">טריות מהשדה ישירות אליך — מזון איכותי, נבחר ביד, נמכר במשקל.</p>
+        <div class="footer-social">
+          <a href="[facebook_handle]" aria-label="Facebook" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+          <a href="[instagram_handle]" aria-label="Instagram" class="social-btn"><i class="fab fa-instagram"></i></a>
+          <a href="[whatsapp_handle]" aria-label="WhatsApp" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+
+      <!-- Column 2: Quick Links -->
+      <div class="footer-col">
+        <h3 class="footer-heading"><span class="heading-accent"></span>ניווט מהיר</h3>
+        <ul class="footer-nav">
+          <li><a href="/how-it-works"><i class="fas fa-chevron-left nav-arrow"></i>איך זה עובד</a></li>
+          <li><a href="/about"><i class="fas fa-chevron-left nav-arrow"></i>אודות</a></li>
+          <li><a href="/contact"><i class="fas fa-chevron-left nav-arrow"></i>צור קשר</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: Contact Info -->
+      <div class="footer-col">
+        <h3 class="footer-heading"><span class="heading-accent"></span>יצירת קשר</h3>
+        <ul class="footer-contact">
+          <li>
+            <span class="contact-icon"><i class="fas fa-envelope"></i></span>
+            <span class="contact-text"><a href="mailto:[business_email]">[business_email]</a></span>
+          </li>
+          <li>
+            <span class="contact-icon"><i class="fas fa-phone"></i></span>
+            <span class="contact-text"><a href="tel:[business_phone]">[business_phone]</a></span>
+          </li>
+          <li><a href="/"><span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span>
+            <span class="contact-text">[business_address]</span></a></li>
+        </ul>
+      </div>
+
+      <!-- Column 4: Fresh Badge -->
+      <div class="footer-col footer-badge-col">
+        <div class="freshness-badge">
+          <div class="badge-icon"><i class="fas fa-leaf"></i></div>
+          <p class="badge-title">מזון טרי</p>
+          <p class="badge-sub">נבחר מדי יום<br>ישירות מהספקים</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <!-- Bottom Bar -->
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 נאות שדה. כל הזכויות שמורות.</p>
+      <div class="footer-legal">
+        <a href="/privacy">מדיניות פרטיות</a>
+        <span class="legal-sep">·</span>
+        <a href="/terms">תנאי שימוש</a><span class="separator">|</span>
+            <a href="/return-policy" aria-label="מדיניות החזרות">
+              מדיניות החזרות
+            </a>
+        <span class="legal-sep">·</span>
+        <a href="/accessibility">נגישות</a>
+        <span class="legal-sep">·</span>
+        <a href="https://zappy5.com" target="_blank" class="zappy-attribution">נוצר באמצעות Zappy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+  
+  <a href="https://wa.me/[whatsapp_handle]" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+  
+  <div data-integration="accessibility:toolbar"></div>
+
+    <script src="/script.js"></script>
+
+    <script id="zappy-mobile-submenu-script">
+    (function() {
+      function initMobileSubmenuToggles() {
+        if (window.innerWidth > 768) {
+          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
+          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
+          return;
+        }
+        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
+        items.forEach(function(li) {
+          if (li.querySelector('.mobile-submenu-toggle')) return;
+          var submenu = li.querySelector('.sub-menu');
+          var parentLink = li.querySelector(':scope > a');
+          if (!submenu || !parentLink) return;
+          var toggleBtn = document.createElement('button');
+          toggleBtn.className = 'mobile-submenu-toggle';
+          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+          toggleBtn.setAttribute('type', 'button');
+          parentLink.insertAdjacentElement('afterend', toggleBtn);
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
+            });
+            submenu.classList.toggle('mobile-expanded');
+            toggleBtn.classList.toggle('expanded');
+          });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
+      else { initMobileSubmenuToggles(); }
+      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      // Re-initialize when mobile menu becomes visible (MutationObserver)
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes') {
+            var target = mutation.target;
+            if (target.classList && (target.classList.contains('active') || target.classList.contains('open'))) {
+              setTimeout(initMobileSubmenuToggles, 100);
+            }
+          }
+        });
+      });
+      setTimeout(function() {
+        document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu, nav').forEach(function(menu) {
+          observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+        });
+      }, 500);
+    })();
+    </script>
+
+    <script id="zappy-mobile-lang-menu-script">
+    (function() {
+      function initMobileLangMenu() {
+        if (window.innerWidth > 768) {
+          var existingMenu = document.querySelector('.mobile-lang-menu');
+          if (existingMenu) existingMenu.remove();
+          return;
+        }
+        if (document.querySelector('.mobile-lang-menu')) return;
+        var switcher = document.querySelector('.lang-switcher');
+        if (!switcher) return;
+        var dropdown = switcher.querySelector('.lang-switcher-dropdown');
+        if (!dropdown) return;
+        var options = dropdown.querySelectorAll('.lang-option');
+        if (options.length === 0) return;
+        var navMenu = document.getElementById('navMenu') || document.querySelector('.nav-menu') || document.querySelector('nav ul');
+        if (!navMenu) return;
+        var currentLang = document.documentElement.lang || 'en';
+        var langConfigs = {
+          he: {name:'עברית',flag:'https://api.iconify.design/circle-flags/il.svg'},
+          en: {name:'English',flag:'https://api.iconify.design/circle-flags/us.svg'},
+          ar: {name:'العربية',flag:'https://api.iconify.design/circle-flags/sa.svg'},
+          fr: {name:'Français',flag:'https://api.iconify.design/circle-flags/fr.svg'},
+          es: {name:'Español',flag:'https://api.iconify.design/circle-flags/es.svg'},
+          de: {name:'Deutsch',flag:'https://api.iconify.design/circle-flags/de.svg'},
+          ru: {name:'Русский',flag:'https://api.iconify.design/circle-flags/ru.svg'},
+          zh: {name:'中文',flag:'https://api.iconify.design/circle-flags/cn.svg'},
+          ja: {name:'日本語',flag:'https://api.iconify.design/circle-flags/jp.svg'},
+          pt: {name:'Português',flag:'https://api.iconify.design/circle-flags/br.svg'},
+          it: {name:'Italiano',flag:'https://api.iconify.design/circle-flags/it.svg'},
+          ko: {name:'한국어',flag:'https://api.iconify.design/circle-flags/kr.svg'}
+        };
+        var container = document.createElement('div');
+        container.className = 'mobile-lang-menu';
+        var currentConfig = langConfigs[currentLang] || {name:currentLang,flag:''};
+        var toggleBtn = document.createElement('button');
+        toggleBtn.className = 'mobile-lang-toggle';
+        toggleBtn.type = 'button';
+        var currentFlagHtml = currentConfig.flag ? '<img src="' + currentConfig.flag + '" width="20" height="20" alt="" style="border-radius:50%;margin-right:8px;margin-left:8px;">' : '';
+        toggleBtn.innerHTML = currentFlagHtml + currentConfig.name;
+        container.appendChild(toggleBtn);
+        var optionsDiv = document.createElement('div');
+        optionsDiv.className = 'mobile-lang-options';
+        var currentLink = document.createElement('a');
+        currentLink.className = 'mobile-lang-option active';
+        currentLink.href = '#';
+        currentLink.innerHTML = currentFlagHtml + currentConfig.name;
+        optionsDiv.appendChild(currentLink);
+        options.forEach(function(opt) {
+          var link = document.createElement('a');
+          link.className = 'mobile-lang-option';
+          link.href = opt.getAttribute('href');
+          link.innerHTML = opt.innerHTML;
+          optionsDiv.appendChild(link);
+        });
+        container.appendChild(optionsDiv);
+        navMenu.appendChild(container);
+        toggleBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleBtn.classList.toggle('expanded');
+          optionsDiv.classList.toggle('expanded');
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileLangMenu); }
+      else { initMobileLangMenu(); }
+      window.addEventListener('resize', function() { clearTimeout(window._mlrt); window._mlrt = setTimeout(initMobileLangMenu, 250); });
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+# Business — Generative Engine Optimization Map
+
+---
+
+## Pages
+
+### בית
+https://example.com
+גלו את נאות שדה, חנות פירות וירקות טריים ישראל עם מבחר עשיר של ירקות, פירות ומוצרי תוספת טבעיים לבריאות. הזמינו לפי משקל ותיהנו מאיכות חקלאית אמיתית.
+
+### איך זה עובד
+https://example.com/how-it-works
+רוצים לדעת איך קונים בנאות שדה? מערכת הבחירה לפי משקל מאפשרת לכם להוסיף סל ירקות ופירות בריאים לעגלה בדיוק כמות שתרצו — פשוט, שקוף וחסכוני.
+
+### אודות
+https://example.com/about
+נאות שדה נולדה מתוך אהבה לאדמה ולבריאות. גלו את הערכים, החזון והמחויבות שלנו לספק פירות וירקות טריים ישראל יחד עם מוצרי תוספת טבעיים לבריאות מהטובים ביותר.
+
+### צור קשר
+https://example.com/contact
+יש לכם שאלה על מוצר, הזמנה או משלוח? צוות נאות שדה זמין עבורכם. צרו קשר עכשיו ותקבלו מענה מהיר ואישי — כי שירות טוב הוא חלק מהטריות שלנו.
+
+### Products
+https://example.com/products
+המוצרים שלנו - נאות שדה
+
+### Cart
+https://example.com/cart
+עגלת הקניות שלך
+
+### Checkout
+https://example.com/checkout
+תשלום
+
+### Login
+https://example.com/login
+התחברות לקוחות
+
+### Account
+https://example.com/account
+החשבון שלי
+
+### Order Success
+https://example.com/order-success
+תודה על ההזמנה
+
+### Product Detail
+https://example.com/product/:slug
+פרטי המוצר - נאות שדה
+
+### Category
+https://example.com/category/:slug
+מוצרים - נאות שדה
+
+## Legal & Policy
+
+### Privacy Policy
+https://example.com/privacy
+Information about how user data is collected, stored, and protected.
+
+### Terms & Conditions
+https://example.com/terms
+Legal terms describing service usage, rights, and policies.
+
+### Accessibility Statement
+https://example.com/accessibility
+Information about WCAG compliance and accessibility features.
+
+---
+
+# Business Context (for LLM understanding)
+
+## About Business
+---
+
+# Additional Resources
+
+- **Sitemap**: https://example.com/sitemap.xml
+- **Robots.txt**: https://example.com/robots.txt
